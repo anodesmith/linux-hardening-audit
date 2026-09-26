@@ -8,7 +8,7 @@ with a read-only auditor that reports compliance without touching the host.
 | | |
 |---|---|
 | **Day** | 1 of 14 |
-| **Status** | Complete - 40/40 tests passing |
+| **Status** | Complete - 30 tests, 40 assertions, 0 failures |
 | **Verification** | `bash -n harden.sh audit.sh lib/*.sh && bash tests/run-tests.sh` |
 | **Tags** | `bash` `security` `cis-benchmark` `linux` `hardening` |
 
@@ -87,7 +87,7 @@ a specific defence:
   config/
     cis.conf             every tunable, overridable from the environment
   tests/
-    run-tests.sh         40 assertions, no dependencies beyond bash
+    run-tests.sh         30 tests / 40 assertions, no dependencies beyond bash
 ```
 
 `ALL_CHECKS` in `lib/checks.sh` is the single ordered registry that both scripts
@@ -102,8 +102,8 @@ code 127.
 bash tests/run-tests.sh
 ```
 
-40 assertions, no framework, no dependencies. Coverage is centred on the parts
-that can silently do the wrong thing:
+30 tests covering 40 assertions, no framework, no dependencies. Coverage is
+centred on the parts that can silently do the wrong thing:
 
 - `set_sshd_directive` adds, replaces without duplicating, and is idempotent
 - `DRY_RUN=1` writes nothing at all
@@ -120,9 +120,9 @@ that can silently do the wrong thing:
 
 The suite runs on Git Bash on Windows, where POSIX permission bits are emulated
 rather than enforced. Two `chmod` assertions are therefore **skipped and
-reported as skipped**, not quietly counted as passes. Everything else - all
-`/etc` text manipulation, dry-run behaviour, idempotency, guardrails, exit codes
-- is fully exercised on both Windows and Linux.
+reported as skipped** in the summary, not quietly counted as passes. Everything
+else - all `/etc` text manipulation, dry-run behaviour, idempotency, guardrails,
+exit codes - is fully exercised on both Windows and Linux.
 
 ## CIS coverage
 
