@@ -28,6 +28,10 @@ ROOT_PREFIX="${ROOT_PREFIX:-}"
 # happened to be when this file was sourced. The test suite sets ROOT_PREFIX
 # after sourcing, which silently left ETC_DIR pointing at the real /etc and
 # nearly had the suite write to the host's /etc/passwd.
+# ShellCheck analyses each file in isolation and cannot see that lib/checks.sh
+# reads these, so it reports the shared path API as unused. The directive sits
+# above the function so it covers the body.
+# shellcheck disable=SC2034
 init_paths() {
     ETC_DIR="${ROOT_PREFIX}/etc"
     SSH_DIR="${ETC_DIR}/ssh"

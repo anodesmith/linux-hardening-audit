@@ -17,9 +17,10 @@ set -o pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT="$(cd "${HERE}/.." && pwd)"
 
-# shellcheck source=../lib/common.sh
+# shellcheck source-path=SCRIPTDIR
+# shellcheck source=lib/common.sh
 . "${ROOT}/lib/common.sh"
-# shellcheck source=../lib/checks.sh
+# shellcheck source=lib/checks.sh
 . "${ROOT}/lib/checks.sh"
 
 # Load the real config, the same way audit.sh and harden.sh do. Running the
@@ -167,6 +168,9 @@ X11Forwarding no
 EOF
 }
 
+# Invoked by the EXIT trap below, not called directly. ShellCheck does not always
+# connect a trap handler back to its function definition.
+# shellcheck disable=SC2329
 cleanup_sandbox() {
     [ -n "${SANDBOX:-}" ] && [ -d "$SANDBOX" ] && rm -rf "$SANDBOX"
     unset ROOT_PREFIX
@@ -418,6 +422,8 @@ if [ "$IS_WINDOWS_SHELL" -eq 0 ]; then
     printf 'root:x:0:0::/root:/bin/bash\n' > "${ETC_DIR}/passwd"
     printf 'root:!:19000:0:99999:7:::\n' > "${ETC_DIR}/shadow"
     chmod 0644 "${ETC_DIR}/shadow"
+    # Read by lib/checks.sh rather than by this script, hence the disable.
+    # shellcheck disable=SC2034
     DRY_RUN=0
     reset_results
     check_file_permissions

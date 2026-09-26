@@ -228,7 +228,8 @@ check_file_permissions() {
         # An empty id in config means "check this file but do not report on it".
         [ -n "$id" ] || continue
         # The check function is named after the file, not the configured id.
-        local check_id="perm_$(basename "$path")"
+        local check_id
+        check_id="perm_$(basename "$path")"
 
         if [ ! -e "$path" ]; then
             record SKIP "$check_id" "$path not present in this root"
@@ -269,7 +270,8 @@ remediate_file_permissions() {
         got="$(stat -c '%a' "$path" 2>/dev/null || echo '?')"
         [ "$got" = "$want" ] && continue
 
-        local check_id="perm_$(basename "$path")"
+        local check_id
+        check_id="perm_$(basename "$path")"
 
         if is_dry_run; then
             printf '  %s[dry-run]%s would chmod %s %s\n' "$C_YELLOW" "$C_RESET" "$want" "$path" >&2
@@ -361,15 +363,17 @@ check_ufw_default_policy() {
 }
 
 # 4.1.1 Ensure the audit rules directory is populated
+# Was a for-loop over a single quoted string, which shellcheck correctly flags as
+# SC2066: the quoting prevents word splitting, so the loop can only ever run once.
+# A straight check says what it means.
 check_audit_rules_present() {
-    local f
-    for f in "${AUDIT_DIR}/rules.d/50-hardening.rules"; do
-        if [ -f "$f" ]; then
-            record PASS 'audit_rules_present' "$(basename "$f") present"
-        else
-            record FAIL 'audit_rules_present' "$f missing"
-        fi
-    done
+    local f="${AUDIT_DIR}/rules.d/50-hardening.rules"
+
+    if [ -f "$f" ]; then
+        record PASS 'audit_rules_present' "$(basename "$f") present"
+    else
+        record FAIL 'audit_rules_present' "$f missing"
+    fi
 }
 
 # ----------------------------------------------------------------- registry
