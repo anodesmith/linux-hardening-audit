@@ -1,0 +1,76 @@
+# ---- Secrets and credentials ----
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+id_rsa
+id_ed25519
+secrets.yml
+secrets.yaml
+*.env
+.env
+.env.*
+!.env.example
+
+# ---- Cloud / IaC state ----
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+crash.log
+crash.*.log
+
+# ---- Ansible ----
+*.retry
+.vault_pass
+
+# ---- Build output ----
+build/
+dist/
+target/
+out/
+*.class
+*.jar
+*.war
+node_modules/
+vendor/
+.gradle/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ---- Test and coverage ----
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+report.xml
+
+# ---- Logs and runtime data ----
+*.log
+logs/
+PIPELINE_LOG.local.md
+scan-results/
+artifacts/
+
+# ---- Editors and OS ----
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Android ----
+local.properties
+*.apk
+*.aab
+captures/
+.cxx/
