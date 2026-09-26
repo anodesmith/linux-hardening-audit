@@ -8,8 +8,8 @@ with a read-only auditor that reports compliance without touching the host.
 | | |
 |---|---|
 | **Day** | 1 of 14 |
-| **Status** | Complete - 30 tests, 40 assertions, 0 failures |
-| **Verification** | `bash -n harden.sh audit.sh lib/*.sh && bash tests/run-tests.sh` |
+| **Status** | Complete - shellcheck clean, 30 tests, 40 assertions, 0 failures |
+| **Verification** | `bash -n ... && shellcheck -x ... && bash tests/run-tests.sh` |
 | **Tags** | `bash` `security` `cis-benchmark` `linux` `hardening` |
 
 ## Focus
@@ -97,6 +97,11 @@ there is invisible at runtime and manifests only as `command not found` and exit
 code 127.
 
 ## Tests
+
+Every script is additionally checked with `shellcheck -x`, which is part of the
+nightly verification command. It found a genuine defect during development: a
+`for` loop over a single quoted path in `check_audit_rules_present` that could
+only ever execute once (SC2066).
 
 ```bash
 bash tests/run-tests.sh
